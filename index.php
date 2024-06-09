@@ -47,6 +47,9 @@ $json = json_decode(file_get_contents($scrappedDir . '/' . $contents[$idx]), tru
         </div>
     </div>
     
+    
+    <iframe src="http://www.youtube.com/embed/<?= $json['trailerURL'] ?>" width="50%" class="mx-auto" style="aspect-ratio: 16/9;" frameborder="0" allowfullscreen></iframe>
+
     <h2 class="mt-3">Seasons</h2>
     <table class="table table-striped">
         <tr>

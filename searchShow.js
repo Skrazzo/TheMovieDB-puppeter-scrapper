@@ -113,6 +113,12 @@ async function scrap(title, browser, page) {
             .getAttribute("data-percent");
     });
 
+    // get trailer iframe
+    const trailerURL = await page.evaluate(() => {
+        let str = document.querySelector(".video>.wrapper>.play_trailer").href;
+        return str.match(/(?<=\?key=).*/)[0] || "No trailer found";
+    });
+
     // Find status and return it, and image URL
     const status = await page.evaluate(() => {
         const boldSelectors = "section.facts>p";
@@ -184,6 +190,7 @@ async function scrap(title, browser, page) {
         overview: overview,
         status: status,
         type: movie ? "Movie" : "Show",
+        trailerURL: trailerURL,
         userScore: userScore || "No idea",
         posterUrl: showImageUrl,
         tmdbURL: tmdbURL,
