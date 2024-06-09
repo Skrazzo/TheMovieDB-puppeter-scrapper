@@ -9,7 +9,7 @@ const saveScreenshot = false;
 const outputJson = true;
 
 const titlesFileName = "scrap.txt";
-const outputFolder = "scrapped/";
+const outputFolder = "/opt/lampp/htdocs/scrapped/";
 
 const launchCode = true;
 const sleepMS = 500;
@@ -115,8 +115,11 @@ async function scrap(title, browser, page) {
 
     // get trailer iframe
     const trailerURL = await page.evaluate(() => {
-        let str = document.querySelector(".video>.wrapper>.play_trailer").href;
-        return str.match(/(?<=\?key=).*/)[0] || "No trailer found";
+        let video = document.querySelector(".video>.wrapper>.play_trailer");
+        if (!video) {
+            return "No trailer found";
+        }
+        return video.href.match(/(?<=\?key=).*/)[0] || "No trailer found";
     });
 
     // Find status and return it, and image URL

@@ -10,6 +10,7 @@ if (!isset($_GET['idx'])) {
     for ($i = 2; $i < count($contents); $i++ ){
         echo '<p><a href="?idx='. $i .'">'. $contents[$i] .'</a></p>';
     }
+    die();
 }
 
 // Check idx
@@ -28,7 +29,7 @@ $json = json_decode(file_get_contents($scrappedDir . '/' . $contents[$idx]), tru
 <!-- <?= "<pre>". print_r($json, 1) ."</pre>" ?> -->
 
 <div class="container shadow rounded mt-5 p-2">
-    <div class="d-flex gap-3">
+    <div class="d-flex gap-3 flex-wrap">
         <?php
         for ($i = 2; $i < count($contents); $i++ ){
             echo '<a href="?idx='. $i .'">'. $contents[$i] .'</a>';
@@ -47,8 +48,14 @@ $json = json_decode(file_get_contents($scrappedDir . '/' . $contents[$idx]), tru
         </div>
     </div>
     
+    <?php
+        if($json['trailerURL'] !== "No trailer found") {
+            echo '<iframe src="http://www.youtube.com/embed/'. $json['trailerURL'] .'" width="50%" class="mx-auto" style="aspect-ratio: 16/9;" frameborder="0" allowfullscreen></iframe>';
+        } else {
+            echo "<p>No trailer found!</p>";
+        }
+    ?>
     
-    <iframe src="http://www.youtube.com/embed/<?= $json['trailerURL'] ?>" width="50%" class="mx-auto" style="aspect-ratio: 16/9;" frameborder="0" allowfullscreen></iframe>
 
     <h2 class="mt-3">Seasons</h2>
     <table class="table table-striped">
