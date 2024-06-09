@@ -133,6 +133,7 @@ async function scrap(title, browser, page) {
         return document.querySelector(".overview>p").innerText;
     });
 
+    let seasons = [];
     if (!movie) {
         // If this is show, then we are searching for a show too
         // Find the button that says view all seasons and click it
@@ -149,7 +150,7 @@ async function scrap(title, browser, page) {
         // get seasons and info about it with regex
         await page.waitForSelector(".season_wrapper");
         log("All seasons page has opened");
-        const seasons = await page.evaluate(() => {
+        seasons = await page.evaluate(() => {
             let tmp = [];
 
             const seasons = document.querySelectorAll(
