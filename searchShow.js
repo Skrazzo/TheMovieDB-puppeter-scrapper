@@ -11,7 +11,7 @@ const outputJson = true;
 const titlesFileName = "scrap.txt";
 const outputFolder = "/opt/lampp/htdocs/scrapped/";
 
-const launchCode = true;
+const launchCode = false;
 const sleepMS = 500;
 
 if (process.argv.length <= 2 && !fs.existsSync(titlesFileName)) {
