@@ -63,6 +63,7 @@ $json = json_decode(
             <th>Episodes</th>
             <th>year</th>
             <th>overview</th>
+            <th></th>
         </tr>
 
         <?php for ($i = 0; $i < count($json["seasons"]); $i++) {
@@ -86,6 +87,13 @@ $json = json_decode(
                 <td style="max-width: 500px;">' .
                 $season["overview"] .
                 '</td>
+                <td>
+                    <a href="./season.php?idx=' .
+                $idx .
+                "&season=" .
+                $i .
+                '">View season</a>
+                </td>
             </tr>
             ';
         } ?>
