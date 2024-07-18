@@ -26,6 +26,7 @@ $json = json_decode(
 ?>
 <!-- <?= "<pre>" . print_r($json, 1) . "</pre>" ?> -->
 
+<title><?= $json["title"] ?></title>
 <div class="container shadow rounded mt-5 p-2">
     <div class="d-flex gap-3 flex-wrap">
         <?php for ($i = 2; $i < count($contents); $i++) {
