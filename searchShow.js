@@ -14,6 +14,8 @@ const outputFolder = "/opt/lampp/htdocs/scrapped/";
 const launchCode = false;
 const sleepMS = 500;
 
+const headless = true;
+
 if (process.argv.length <= 2 && !fs.existsSync(titlesFileName)) {
   console.log("Please provide show name:");
   let fileName = process.argv[1].split("/");
@@ -34,7 +36,7 @@ if (process.argv.length <= 2 && !fs.existsSync(titlesFileName)) {
 
   // Launch the browser and open a new blank page
   log("Launching browser");
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: headless });
   log("Browser has opened, and opening new page");
   const page = await browser.newPage();
 
@@ -66,6 +68,12 @@ if (process.argv.length <= 2 && !fs.existsSync(titlesFileName)) {
   }
 })();
 
+// Function that checks if element is null
+// If element is null, it replaces it with a text
+const checkIfNull = (element, noText = "Null") => {
+  return element ? element.innerText : noText;
+};
+
 async function scrap(title, browser, page) {
   // Navigate the page to a URL
   const url = "https://www.themoviedb.org/";
@@ -76,6 +84,9 @@ async function scrap(title, browser, page) {
   const searchElement = await page.$("#inner_search_v4");
   await searchElement.type(title);
   await searchElement.press("Enter");
+
+  // Expose functions to the browser
+  await page.exposeFunction("checkIfNull", checkIfNull);
 
   // click first result
   const resultSelector = ".results>.card>.wrapper>.image";
@@ -162,8 +173,13 @@ async function scrap(title, browser, page) {
       const seasons = document.querySelectorAll(
         ".season_wrapper>section>.season>.content>div",
       );
+
       for (season of seasons) {
         // tmp.push({ textContent: season.textContent });
+
+        // Get season link
+        let link = season.querySelector("a").href || null;
+
         let contentText = season.querySelector("h4.flex").textContent;
         tmp.push({
           title: season.querySelector("a").textContent || "No title",
@@ -178,11 +194,57 @@ async function scrap(title, browser, page) {
               .querySelector("div.season_overview")
               .innerText.match(/\S+/gim)
               .join(" ") || "No season overview",
+          link: link,
         });
       }
 
       return tmp;
     });
+  }
+
+  // Go to every season link, and then scrape for the episodes info
+  for (let i = 0; i < seasons.length; i++) {
+    let s = seasons[i];
+    log(`Getting episode information for ${s.title}`);
+
+    if (s.link) {
+      await page.goto(s.link);
+
+      const episodeSelector = ".filter>.episode_sort";
+      await page.waitForSelector(episodeSelector);
+
+      const episodes = await page.evaluate(() => {
+        let tmp = []; // Return array
+        let episodes = document.querySelectorAll(".wrapper>.info>div");
+
+        for (e of episodes) {
+          // Info of a single episode
+          let title = e.querySelector("h3");
+          title = checkIfNull(title, "No title");
+
+          let date = e.querySelector(".date>.date");
+          date = checkIfNull(date, "No Date");
+
+          let runtime = e.querySelector(".date>.runtime");
+          runtime = checkIfNull(runtime, "No runtime");
+
+          let rating = e.querySelector(".rating_border");
+          rating = checkIfNull(rating, "No rating");
+          // rating = rating.match(/\d{1,3}(?=%)/)[0];
+
+          tmp.push({
+            title: title,
+            date: date,
+            runtime: runtime,
+            rating: rating,
+          });
+        }
+
+        return tmp;
+      });
+
+      seasons[i]["episodes"] = episodes;
+    }
   }
 
   const json = {
