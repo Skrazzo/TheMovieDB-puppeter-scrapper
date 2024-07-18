@@ -79,7 +79,7 @@ $json = json_decode(
                 $season["title"] .
                 '</td>
                 <td>' .
-                $season["episodes"] .
+                count($season["episodes"]) .
                 '</td>
                 <td>' .
                 $season["year"] .
