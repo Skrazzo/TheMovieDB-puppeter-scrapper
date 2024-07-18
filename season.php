@@ -40,9 +40,10 @@ $s = $seasons[$season];
     </head>
     <body>
         <div class="container body mt-5">
-            <p>
-                <a href="./?idx=<?= $idx ?>" class="mb-5 "><-- Back to the list</a>
-            </p>
+            <div class="d-flex justify-content-between mb-5">
+                <a href="./?idx=<?= $idx ?>"><-- Back to the list</a>
+                <a href="<?= $s["link"] ?>">View on the TMDB</a>
+            </div>
             <div class="d-flex justify-content-between align-items-center">
                 <?= $season == 0
                     ? "<div></div>"
