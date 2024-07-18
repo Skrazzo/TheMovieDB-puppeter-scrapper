@@ -1,5 +1,8 @@
 <?php
 
+
+
+
 $currentDir = getcwd();
 $scrappedDir = $currentDir . "/scrapped";
 
