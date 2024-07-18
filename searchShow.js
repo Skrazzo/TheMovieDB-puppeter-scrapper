@@ -85,9 +85,6 @@ async function scrap(title, browser, page) {
   await searchElement.type(title);
   await searchElement.press("Enter");
 
-  // Expose functions to the browser
-  await page.exposeFunction("checkIfNull", checkIfNull);
-
   // click first result
   const resultSelector = ".results>.card>.wrapper>.image";
   log("Waiting for the search result");
@@ -213,6 +210,22 @@ async function scrap(title, browser, page) {
       const episodeSelector = ".filter>.episode_sort";
       await page.waitForSelector(episodeSelector);
 
+      // Expose function to the browser
+      await page.evaluate(() => {
+        window.checkIfNull = (element, noText = "Null") => {
+          return element ? element.innerText : noText;
+        };
+
+        window.returnMatch = (regex, text, noText = text) => {
+          let tmp = text.match(regex);
+          if (tmp === null || tmp.length === 0) {
+            return noText;
+          }
+
+          return tmp[0];
+        };
+      });
+
       const episodes = await page.evaluate(() => {
         let tmp = []; // Return array
         let episodes = document.querySelectorAll(".wrapper>.info>div");
@@ -230,7 +243,7 @@ async function scrap(title, browser, page) {
 
           let rating = e.querySelector(".rating_border");
           rating = checkIfNull(rating, "No rating");
-          // rating = rating.match(/\d{1,3}(?=%)/)[0];
+          rating = returnMatch(/\d{1,3}/, rating);
 
           tmp.push({
             title: title,
