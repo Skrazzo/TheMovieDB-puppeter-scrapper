@@ -7,21 +7,21 @@ $contents = scandir($scrappedDir);
 
 // movie index
 if (!isset($_GET["idx"])) {
-    for ($i = 2; $i < count($contents); $i++) {
-        echo '<p><a href="?idx=' . $i . '">' . $contents[$i] . "</a></p>";
-    }
-    die();
+	for ($i = 2; $i < count($contents); $i++) {
+		echo '<p><a href="?idx=' . $i . '">' . $contents[$i] . "</a></p>";
+	}
+	die();
 }
 
 // Check idx
 $idx = $_GET["idx"];
 if ($idx < 2 || $idx >= count($contents)) {
-    die("Wrong index number!");
+	die("Wrong index number!");
 }
 
 $json = json_decode(
-    file_get_contents($scrappedDir . "/" . $contents[$idx]),
-    true
+	file_get_contents($scrappedDir . "/" . $contents[$idx]),
+	true
 );
 ?>
 <!-- <?= "<pre>" . print_r($json, 1) . "</pre>" ?> -->
@@ -30,7 +30,7 @@ $json = json_decode(
 <div class="container shadow rounded mt-5 p-2">
     <div class="d-flex gap-3 flex-wrap">
         <?php for ($i = 2; $i < count($contents); $i++) {
-            echo '<a href="?idx=' . $i . '">' . $contents[$i] . "</a>";
+        	echo '<a href="?idx=' . $i . '">' . $contents[$i] . "</a>";
         } ?>
     </div>
     <div class="d-flex gap-3 m-3">
@@ -42,17 +42,17 @@ $json = json_decode(
             <p>Status: <strong><?= $json["status"] ?></strong></p>
 
             <a href="<?= $json[
-                "tmdbURL"
+            	"tmdbURL"
             ] ?>" target="_blank" rel="noopener noreferrer">TMDB</a>
         </div>
     </div>
 
     <?php if ($json["trailerURL"] !== "No trailer found") {
-        echo '<iframe src="http://www.youtube.com/embed/' .
-            $json["trailerURL"] .
-            '" width="50%" class="mx-auto" style="aspect-ratio: 16/9;" frameborder="0" allowfullscreen></iframe>';
+    	echo '<iframe src="http://www.youtube.com/embed/' .
+    		$json["trailerURL"] .
+    		'" width="50%" class="mx-auto" style="aspect-ratio: 16/9;" frameborder="0" allowfullscreen></iframe>';
     } else {
-        echo "<p>No trailer found!</p>";
+    	echo "<p>No trailer found!</p>";
     } ?>
 
 
@@ -68,32 +68,32 @@ $json = json_decode(
         </tr>
 
         <?php for ($i = 0; $i < count($json["seasons"]); $i++) {
-            $season = $json["seasons"][$i];
+        	$season = $json["seasons"][$i];
 
-            echo '
+        	echo '
             <tr>
                 <td>' .
-                $i +
-                1 .
-                '</td>
+        		$i +
+        		1 .
+        		'</td>
                 <td>' .
-                $season["title"] .
-                '</td>
+        		$season["title"] .
+        		'</td>
                 <td>' .
-                count($season["episodes"]) .
-                '</td>
+        		count($season["episodes"]) .
+        		'</td>
                 <td>' .
-                $season["year"] .
-                '</td>
+        		$season["year"] .
+        		'</td>
                 <td style="max-width: 500px;">' .
-                $season["overview"] .
-                '</td>
+        		$season["overview"] .
+        		'</td>
                 <td>
                     <a href="./season.php?idx=' .
-                $idx .
-                "&season=" .
-                $i .
-                '">View season</a>
+        		$idx .
+        		"&season=" .
+        		$i .
+        		'">View season</a>
                 </td>
             </tr>
             ';
