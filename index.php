@@ -88,13 +88,11 @@ $json = json_decode(
                 <td style="max-width: 500px;">' .
         		$season["overview"] .
         		'</td>
-                <td>
-                    <a href="./season.php?idx=' .
+                <td> <a href="./season.php?idx=' .
         		$idx .
         		"&season=" .
         		$i .
-        		'">View season</a>
-                </td>
+        		'">View season</a> </td>
             </tr>
             ';
         } ?>

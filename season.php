@@ -9,13 +9,13 @@ $contents = scandir($scrappedDir);
 $idx = $_GET["idx"];
 // Less than 2, because first two are . and ..
 if ($idx < 2 || $idx >= count($contents)) {
-    die("Wrong index number!");
+	die("Wrong index number!");
 }
 
 // Load movie/show file
 $json = json_decode(
-    file_get_contents($scrappedDir . "/" . $contents[$idx]),
-    true
+	file_get_contents($scrappedDir . "/" . $contents[$idx]),
+	true
 );
 
 // Check if season is correct
@@ -23,10 +23,10 @@ $season = $_GET["season"];
 $seasons = $json["seasons"];
 
 if (!isset($season)) {
-    die("Please provide season ?season=n");
+	die("Please provide season ?season=n");
 }
 if ($season < 0 || $season >= count($seasons)) {
-    die("Wrong season number!");
+	die("Wrong season number!");
 }
 
 // $s Selected season
@@ -46,24 +46,24 @@ $s = $seasons[$season];
             </div>
             <div class="d-flex justify-content-between align-items-center">
                 <?= $season == 0
-                    ? "<div></div>"
-                    : "<a class='fs-2' href='./season.php?idx=" .
-                        $idx .
-                        "&season=" .
-                        $season -
-                        1 .
-                        "'><--</a>" ?>
+                	? "<div></div>"
+                	: "<a class='fs-2' href='./season.php?idx=" .
+                		$idx .
+                		"&season=" .
+                		$season -
+                		1 .
+                		"'><--</a>" ?>
 
                 <h1><?= $s["title"] ?></h1>
 
                 <?= $season == count($seasons) - 1
-                    ? "<div></div>"
-                    : "<a class='fs-2' href='./season.php?idx=" .
-                        $idx .
-                        "&season=" .
-                        $season +
-                        1 .
-                        "'>--></a>" ?>
+                	? "<div></div>"
+                	: "<a class='fs-2' href='./season.php?idx=" .
+                		$idx .
+                		"&season=" .
+                		$season +
+                		1 .
+                		"'>--></a>" ?>
             </div>
 
             <div class="mt-5">
@@ -80,24 +80,24 @@ $s = $seasons[$season];
                     <tbody>
 
                     <?php for ($i = 0; $i < count($s["episodes"]); $i++) {
-                        echo '
+                    	echo '
                         <tr>
                             <th scope="row">' .
-                            $i +
-                            1 .
-                            '</th>
+                    		$i +
+                    		1 .
+                    		'</th>
                             <td>' .
-                            $s["episodes"][$i]["title"] .
-                            '</td>
+                    		$s["episodes"][$i]["title"] .
+                    		'</td>
                             <td>' .
-                            $s["episodes"][$i]["date"] .
-                            '</td>
+                    		$s["episodes"][$i]["date"] .
+                    		'</td>
                             <td>' .
-                            $s["episodes"][$i]["runtime"] .
-                            '</td>
+                    		$s["episodes"][$i]["runtime"] .
+                    		'</td>
                             <td>' .
-                            $s["episodes"][$i]["rating"] .
-                            '%</td>
+                    		$s["episodes"][$i]["rating"] .
+                    		'%</td>
                         </tr>
                         ';
                     } ?>
