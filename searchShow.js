@@ -36,7 +36,10 @@ if (process.argv.length <= 2 && !fs.existsSync(titlesFileName)) {
 
 	// Launch the browser and open a new blank page
 	log("Launching browser");
-	const browser = await puppeteer.launch({ headless: headless });
+	const browser = await puppeteer.launch({ headless: headless, args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+    ] });
 	log("Browser has opened, and opening new page");
 	const page = await browser.newPage();
 
